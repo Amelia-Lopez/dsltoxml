@@ -7,10 +7,12 @@ import org.codehaus.groovy.control.customizers.ImportCustomizer
 class DslToXml {
 
     static void main(String... args) {
-        println createXmlFromDslString("/email.groovy")
+        println createXmlFromDslFile("/email.groovy")
+        println '\n'
+        println createXmlFromDslFile("/logic.groovy", [user: 'me@here.com', defaultStyle: true])
     }
 
-    def static Object createXmlFromDslString(String fileName) {
+    def static Object createXmlFromDslFile(String fileName, Map<String, Object> bindings = [:]) {
         def dslString = this.getClass().getResource(fileName).text
 
         def config = new CompilerConfiguration()
@@ -20,7 +22,10 @@ class DslToXml {
         imports.addStarImports(DslToXml.class.package.name)
         config.addCompilationCustomizers(imports)
 
-        def shell = new GroovyShell(this.class.classLoader, config)
+        def binding = new Binding()
+        bindings.each { varName, value -> binding.setVariable(varName, value) }
+
+        def shell = new GroovyShell(this.class.classLoader, binding, config)
         shell.evaluate(dslString + '\n toString()')  // todo: this concatenation is super hacky
     }
 }
