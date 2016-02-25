@@ -9,7 +9,9 @@ class DslToXml {
     static void main(String... args) {
         println createXmlFromDslFile("/email.groovy")
         println '\n'
-        println createXmlFromDslFile("/logic.groovy", [user: 'me@here.com', defaultStyle: true])
+        println createXmlFromDslFile("/bindings.groovy", [user: 'me@here.com', defaultStyle: true])
+        println '\n'
+        println createXmlFromDslFile("/templating.groovy")
     }
 
     def static Object createXmlFromDslFile(String fileName, Map<String, Object> bindings = [:]) {

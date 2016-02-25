@@ -32,8 +32,8 @@ Sample Output
 </e-mail>
 ```
 
-Complex Example
-===============
+Variable Binding Example
+========================
 
 Sample Input
 ------------
@@ -58,6 +58,64 @@ Sample Output
   <from>me@here.com</from>
   <to>someone@somewhere.com</to>
   <subject>Orders</subject>
+  <body style='html'>
+    <p>Attack at dawn.</p>
+  </body>
+</e-mail>
+```
+
+Templating Example
+==================
+
+Sample Input
+------------
+```
+[[address: 'bbobby@somewhere.com', name: 'Bob Bobby'],
+ [address: 'ttimmy@somewhere.com', name: 'Tim Timmy'],
+ [address: 'deepthroat@nowhere.com'],
+ [address: 'secret@nowhere.com']].each { destination ->
+    'e-mail' {
+        from 'me@somewhere.com'
+        to destination.address
+        subject "Orders for ${destination.name ?: 'You'}"
+        body (style: 'html') {
+            p 'Attack at dawn.'
+        }
+    }
+}
+```
+
+Sample Output
+-------------
+```
+<e-mail>
+  <from>me@somewhere.com</from>
+  <to>bbobby@somewhere.com</to>
+  <subject>Orders for Bob Bobby</subject>
+  <body style='html'>
+    <p>Attack at dawn.</p>
+  </body>
+</e-mail>
+<e-mail>
+  <from>me@somewhere.com</from>
+  <to>ttimmy@somewhere.com</to>
+  <subject>Orders for Tim Timmy</subject>
+  <body style='html'>
+    <p>Attack at dawn.</p>
+  </body>
+</e-mail>
+<e-mail>
+  <from>me@somewhere.com</from>
+  <to>deepthroat@nowhere.com</to>
+  <subject>Orders for You</subject>
+  <body style='html'>
+    <p>Attack at dawn.</p>
+  </body>
+</e-mail>
+<e-mail>
+  <from>me@somewhere.com</from>
+  <to>secret@nowhere.com</to>
+  <subject>Orders for You</subject>
   <body style='html'>
     <p>Attack at dawn.</p>
   </body>
